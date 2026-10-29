@@ -10,6 +10,7 @@ typedef struct{
     int width;
     int lenght;
     int height;
+    int min_width_or_lenght;
 
 }Block;
 
@@ -33,6 +34,13 @@ int check_width_or_lenght(Block *block){
         return 2;
     }
 }
+
+void ordenate_array(Storage *storage){
+    
+
+}
+
+
 
 void minimal_height(Storage *storage){
     for(int i = 0; i < storage->diff_blocks; i++){
@@ -88,4 +96,6 @@ void rotate_block(Block *block, int n){
 }
 
 
-    
+void place_block(Block *block){
+
+}
