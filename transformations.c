@@ -1,5 +1,10 @@
 #include <stdio.h>
 
+typedef struct{
+    int current_width;
+    int current_lenght;
+    int current_height;
+}Current_measures;
 
 typedef struct{
     int width;
