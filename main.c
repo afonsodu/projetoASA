@@ -55,32 +55,41 @@ void create_blocks(Storage *storage,Block *block){
 }
 
 
-void sort_array(Storage *storage){
-    int modifications = 0;
-    for(int i = 1; i <storage->blocks_in_storage; i++){
-        if(storage->block[i].l > storage->block[i-1].l || 
-            (storage->block[i].l == storage->block[i-1].l 
-            && storage->block[i].w > storage->block[i-1].w)){
-                Block temp_block = storage->block[i-1];
-                storage->block[i-1] = storage->block[i];
-                storage->block[i] = temp_block;
-                modifications += 1;
+void compare_blocks(const void *a, const void *b){
+    const Block *x = (const Block*) a;
+    const Block *y = (const Block*) b;
+    if (x->l != y->l){
+        if(y->l > x->l){
+            return 1;
+        }
+        else{
+            return -1;
         }
     }
-    if(!modifications){
-        return;
+    if (x->w != y->w){
+        if(y->w > x->w){
+            return 1;
+        }
+        else{
+            return -1;
+        }
     }
-    sort_array(storage);
+    return 0;
+}
+
+void sort_array(Storage *storage){
+    qsort(storage->block, storage->blocks_in_storage,
+          sizeof(Block), compare_blocks);
 }
 
 int max_height(Storage *storage){
     int n = storage->blocks_in_storage;
     int tower[n];
     int best_tower = 0;
-
-    for(int i = 0; i < n; i++){
+    int i,j;
+    for(i = 0; i < n; i++){
         tower[i] = storage->block[i].h;
-        for(int j = 0; j < i; j++){
+        for(j = 0; j < i; j++){
             if(storage->block[j].w > storage->block[i].w &&
                storage->block[j].l > storage->block[i].l &&
                tower[j] + storage->block[i].h > tower[i]){
@@ -103,13 +112,14 @@ int main(int argc, char *argv[]){
     int w;
     int l;
     int h;
+    
     Storage my_storage;
     Storage *storage = &my_storage;
-
+    storage->blocks_in_storage = 0;
     storage->diff_blocks = n;
-    storage->block = (Block*)malloc(n * sizeof(Block));
-
-    for (int i = 0; i < n; i++){
+    storage->block = (Block*)malloc(3*n * sizeof(Block));
+    int i;
+    for (i = 0; i < n; i++){
         int res = scanf("%d %d %d", &w,&l,&h);
         (void)res;
         storage->block[i].w = w;
