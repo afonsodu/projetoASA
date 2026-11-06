@@ -3,9 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-
-
 typedef struct{
     int w;
     int l;
@@ -78,23 +75,23 @@ void sort_array(Storage *storage){
 
 int max_height(Storage *storage){
     int n = storage->blocks_in_storage;
-    int dp[n];
-    int best = 0;
+    int tower[n];
+    int best_tower = 0;
 
     for(int i = 0; i < n; i++){
-        dp[i] = storage->block[i].h;
+        tower[i] = storage->block[i].h;
         for(int j = 0; j < i; j++){
             if(storage->block[j].w > storage->block[i].w &&
                storage->block[j].l > storage->block[i].l &&
-               dp[j] + storage->block[i].h > dp[i]){
-                dp[i] = dp[j] + storage->block[i].h;
+               tower[j] + storage->block[i].h > tower[i]){
+                tower[i] = tower[j] + storage->block[i].h;
             }
         }
-        if(dp[i] > best){
-            best = dp[i];
+        if(tower[i] > best_tower){
+            best_tower = tower[i];
         }
     }
-    return best;
+    return best_tower;
 }
 
 int main(int argc, char *argv[]){
